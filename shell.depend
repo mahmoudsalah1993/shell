@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1444818452 source:/home/mahmoud/os_labs/shell/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	"shell_library.h"
+
+1444813511 /home/mahmoud/os_labs/shell/shell_library.h
+
