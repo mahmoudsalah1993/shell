@@ -6,6 +6,8 @@ enum error_codes{
     command_too_long_exception,
     input_exception,
     empty_command_exception,
+    closing_shell,
+    change_directory_failed,
 };
 
 void print_error(enum error_codes error);
@@ -13,5 +15,8 @@ char** remove_spaces(char* input);
 int validate_input(char* input); //checks for string length  <= 512
 int get_word_count(char* input);
 void execute(char** command_params);
+int compare_strings(char* a , char* b);
+void make_system_calls(char* command , char** command_params);
+void change_directory(char* path);
 #endif // ERROR_CODES
 

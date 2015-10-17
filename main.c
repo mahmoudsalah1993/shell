@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "shell_library.h"
 
 //defines
@@ -12,6 +14,7 @@ typedef int bool;
 
 enum error_codes error;
 char* input_line;
+char* program_directory;
 //history count
 int current_command_count = 0;
 //history
@@ -19,6 +22,8 @@ char** commands_entered;
 
 int main(int argc, char** argv)
 {
+    program_directory = malloc(512);
+    program_directory = getcwd(program_directory , 512);
     input_line = malloc(512);
     if(argc < 2){
         //interactive mode
@@ -46,7 +51,7 @@ int main(int argc, char** argv)
         else{
             while(fgets(input_line , 512 , stdin)){
                 if(validate_input(input_line)){
-                    printf("%s\n" , input_line);
+                    printf("shell>%s\n" , input_line);
                     char** s = remove_spaces(input_line);
                     execute(s);
                 }
@@ -74,6 +79,12 @@ void print_error(enum error_codes error){
         case empty_command_exception:
         printf("Empty command entered\n");
         break;
+        case closing_shell:
+        printf("closing shell\n");
+        break;
+        case change_directory_failed:
+        printf("failed to change current directory\n");
+        break;
     }
 }
 
@@ -81,19 +92,40 @@ char** remove_spaces(char* input){
     int string_count = get_word_count(input);
     char** arr;
     arr = malloc((string_count+1) * sizeof(char *));
-    int i ;
+    int i ,start;
     for(i = 0 ; i < string_count ; i ++ ){
-        arr[i] = malloc(MAX_STRING_LENGTH * sizeof(char *));
+        arr[i] = malloc(MAX_STRING_LENGTH);
     }
     //remove spaces and tokenize
-    char* temp;
-    temp = strtok(input , " \t\n");
+    char* temp = malloc(512);
     i = 0;
-    while(temp){
-        arr[i] = temp;
-        temp = strtok(NULL , "\t \n");
-        i++;
+    int arr_index = 0;
+    while(input[i]!='\0'){
+        //quotations
+        if(input[i]=='"'){
+            i++;
+            start = i;
+            while(input[i]!='"' && input[i]!='\0'){
+                temp[i - start]=input[i];
+                i++;
+            }
+            temp[i - start] = '\0';
+            strcpy(arr[arr_index] , temp);
+            arr_index++;
+        }
+        else if(input[i]==' ' || input[i]=='\t' || input[i]=='\n')i++;
+        else{
+            start = i;
+             while(input[i]!=' ' && input[i]!='\0' && input[i]!='\t' && input[i]!='\n'){
+                temp[i - start]=input[i];
+                i++;
+            }
+            temp[i-start] = '\0';
+            strcpy(arr[arr_index] , temp);
+            arr_index++;
+        }
     }
+    arr[arr_index] = NULL;
     return arr;
 }
 
@@ -113,8 +145,8 @@ int get_word_count(char* input){
     int counter = 0 ;
     int i = 0;
     while(input[i]!='\0' && input[i]!='\n'){
+        counter++;
         if(input[i]!=' ' && input[i]!='\t' && input[i]!='\0' && input[i]!='\n'){
-            counter++;
             while(input[i]!=' ' && input[i]!='\t' && input[i]!='\0' && input[i]!='\n'){
                 i++;
             }
@@ -127,23 +159,68 @@ int get_word_count(char* input){
 void execute(char** command_params){
     bool background = false;
     char* command = command_params[0];
-    if(command == NULL){
+    if(command == NULL || command[0] == NULL){
         error = empty_command_exception;
         print_error(error);
     }
     else{
-        //command_params = &command_params[1];
+        //check if exit to terminate main process
+        if(compare_strings(command_params[0] , "exit")){
+            error = closing_shell;
+            print_error(error);
+            exit(0);
+        }
         int i = 0;
         while(command_params[i]!=NULL){
             if(command_params[i][0]=='&' && command_params[i+1]==NULL){
                 background = true;
+                command_params[i] = NULL;
                 break;
             }
+            else if(command_params[i][0]==NULL)command_params[i] = NULL;
             else if(command_params[i]==NULL)break;
             i++;
         }
-        printf("%s\n" , command_params[0]);
-        execvp(command , command_params);
+        if(compare_strings(command_params[0] , "cd")){
+            change_directory(command_params[1]);
+        }
+        else{
+            int status;
+            pid_t pid = fork();
+            //child
+            if(pid == 0){
+                make_system_calls(command , command_params);
+            }
+            //parent
+            else{
+                if(!background){
+                    waitpid(pid , &status , 0);
+                }
+            }
+        }
     }
     return;
+}
+
+void change_directory(char* path){
+    if(path == "" || path == NULL)
+        path = getenv("HOME");
+    int res = chdir(path);
+    if(res != 0){
+        error = change_directory_failed;
+        print_error(error);
+    }
+}
+
+void make_system_calls(char* command , char** command_params){
+    execvp(command , command_params);
+}
+
+bool compare_strings(char* a , char* b){
+    int i = 0;
+    while(a[i]==b[i]){
+        if(a[i]=='\0')return true;
+        i++;
+    }
+    return false;
 }
