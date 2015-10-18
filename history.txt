@@ -1,0 +1,72 @@
+hello
+ahmed
+exit
+history
+hello
+history
+exit
+history &
+exit
+echo l
+cd usr/bin
+cd mahmoud/bin
+cd /home/mahmoud/bin
+cd /home/mahmoud
+ls
+cd ..
+ls
+cd ..
+ls
+pwd
+cd bin
+ls
+echo l
+history
+history
+exit
+ls
+echo l
+echo l
+ls
+ls
+
+exit
+pwd
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+
+ls
+exit
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+echo l
+cd ..
+pwd
+history

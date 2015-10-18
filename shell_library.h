@@ -8,6 +8,7 @@ enum error_codes{
     empty_command_exception,
     closing_shell,
     change_directory_failed,
+    command_failed,
 };
 
 void print_error(enum error_codes error);
@@ -18,5 +19,9 @@ void execute(char** command_params);
 int compare_strings(char* a , char* b);
 void make_system_calls(char* command , char** command_params);
 void change_directory(char* path);
+void signalHandler(int sig);
+char* copy_directory_path(char* path);
+void print_history();
+void add_to_history(char* command);
 #endif // ERROR_CODES
 

@@ -74,7 +74,7 @@ void print_error(enum error_codes error){
         printf("Your command must not exceed 512 characters\n");
         break;
         case input_exception:
-        printf("Failed to get input\n");
+        printf("Program ended\n");
         break;
         case empty_command_exception:
         printf("Empty command entered\n");
@@ -84,6 +84,9 @@ void print_error(enum error_codes error){
         break;
         case change_directory_failed:
         printf("failed to change current directory\n");
+        break;
+        case command_failed:
+        printf("failed to execute this command\n");
         break;
     }
 }
@@ -138,6 +141,7 @@ int validate_input(char* input){
             break;
         }
     }
+    add_to_history(input);
     return valid;
 }
 
@@ -185,6 +189,7 @@ void execute(char** command_params){
             change_directory(command_params[1]);
         }
         else{
+            signal(SIGCHLD , signalHandler);
             int status;
             pid_t pid = fork();
             //child
@@ -213,7 +218,44 @@ void change_directory(char* path){
 }
 
 void make_system_calls(char* command , char** command_params){
-    execvp(command , command_params);
+    if(compare_strings(command_params[0] , "history")){
+            print_history();
+    }
+    else{
+        char* path = getenv("PATH");
+        execv(command , command_params);
+        char** arr;
+        arr = malloc((512) * sizeof(char *));
+        int i;
+        for(i = 0 ; i < 512; i ++ ){
+            arr[i] = malloc(MAX_STRING_LENGTH);
+        }
+        i = 0;
+        char* temp = malloc(512);
+        temp = strtok(path , ":");
+        while(temp!=NULL){
+            strcpy(arr[i] , temp);
+            i++;
+            temp = strtok(NULL,":");
+        }
+
+        char* original_command = malloc(512);
+        strcpy(original_command , command);
+
+        i = 0;
+        while(arr[i]!=NULL){
+            char* new_command = malloc(512);
+            strcpy(new_command , copy_directory_path(arr[i]));
+            strncat(new_command , original_command , 512);
+            strcpy(command_params[0] , new_command);
+            execv(new_command,command_params);
+            i++;
+        }
+        //execvp(command , command_params);
+        error = command_failed;
+        print_error(error);
+    }
+    exit(0);
 }
 
 bool compare_strings(char* a , char* b){
@@ -223,4 +265,53 @@ bool compare_strings(char* a , char* b){
         i++;
     }
     return false;
+}
+
+void signalHandler(int sig){
+    char* address = malloc(strlen(program_directory)*2 + 8);
+    strcpy(address , copy_directory_path(program_directory));
+    strncat(address , "log.txt" , strlen("log.txt"));
+    FILE *f;
+    f = fopen(address , "a");
+    fputs("child process terminated\n" , f);
+    fclose(f);
+}
+
+void add_to_history(char* command){
+    char* address = malloc(strlen(program_directory)*2 + 8);
+    strcpy(address , copy_directory_path(program_directory));
+    strncat(address , "history.txt" , strlen("history.txt"));
+    FILE *f;
+    f = fopen(address , "a");
+    fputs(command , f);
+    fclose(f);
+}
+
+void print_history(){
+    char* temp = malloc(600);
+    char* address = malloc(strlen(program_directory)*2 + 8);
+    strcpy(address , copy_directory_path(program_directory));
+    strncat(address , "history.txt" , strlen("history.txt"));
+    FILE *f;
+    f = fopen(address , "r");
+    temp = fgets(temp , 512 , f);
+    while(temp!=NULL){
+        puts(temp);
+        temp = fgets(temp , 512 , f);
+    }
+    fclose(f);
+}
+
+char* copy_directory_path(char* path){
+    char* temp = malloc(strlen(path)*2);
+    int t_index = 0 , p_index = 0;
+    while(path[p_index]!='\0'){
+        temp[t_index] = path[p_index];
+        p_index++;
+        t_index++;
+    }
+    temp[t_index] = '/';
+    t_index++;
+    temp[t_index] = '\0';
+    return temp;
 }
