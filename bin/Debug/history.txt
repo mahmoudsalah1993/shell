@@ -5,3 +5,29 @@ hello
 history    
 say my name? Heisenberg, You're goddamn right. hello hello hello  hello?
 
+ahlan ana ahmed mohamed
+hello
+    	ana 		karim
+   ana     msh
+history    
+say my name? Heisenberg, You're goddamn right. hello hello hello  hello?
+
+echo $x
+$y
+hello
+ahlan ana ahmed mohamed
+hello
+    	ana 		karim
+   ana     msh
+history
+say my name? Heisenberg, You're goddamn right. hello hello hello  hello?
+
+ahlan ana ahmed mohamed
+hello
+    	ana 		karim
+   ana     msh
+history
+say my name? Heisenberg, You're goddamn right. hello hello hello  hello?
+
+apt-get update
+sudo apt-get update

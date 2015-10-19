@@ -70,3 +70,151 @@ echo l
 cd ..
 pwd
 history
+x=5
+echo $PATH
+
+
+
+
+
+
+
+exit
+#comment
+$x=4
+x=4
+x=4
+#hello
+exit
+x=3
+x=3
+x=4
+x=3
+x=4
+x=4
+echo $x
+x=4
+echo $x
+echo $PATH
+echo $x
+x=4
+x=3
+exit
+x=4
+exit
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+exit
+x=3
+exit
+x=3
+
+
+
+
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+echo $x
+x=3
+
+echo x
+echo $x
+x=3
+echo $x
+
+x=3 4
+x=3 4
+x=3 4
+x="3 4"
+x="3 4"
+x=3
+echo $x
+x=3
+echo $x
+x=3
+echo $x
+exit
+x=3
+echo $x
+x=3
+echo $x
+
+x=3
+echo $x
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+x=3
+echo $x
+echo $PATH
+x="3 4"
+x"3"
+x="3"
+echo $x
+x="444"
+echo $x
+echo mhma"hello "
+echo "hello my friend"
+x="hello my friend"
+x="hello jack"
+x="3 4"
+x=3
+echo $3
+echo $x
+
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+x="3 4"
+exit
+x="3 4"
+echo $x
+
+x=3 4
+echo $x
+exit
+echo $x
+x=3 4
+x=3 4
+x=3 4
+x="3 4"
+echo $x
+echo $PATH
+x=m"hama r"
+x=m"hara"ko"yala"
+pwd
+ls
+gedit history.txt
+apt -get
+apt-get update
+sudo apt-get update

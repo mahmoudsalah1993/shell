@@ -10,6 +10,10 @@ enum error_codes{
     change_directory_failed,
     command_failed,
 };
+typedef struct{
+    char* variable_name;
+    char* value;
+}variable;
 
 void print_error(enum error_codes error);
 char** remove_spaces(char* input);
@@ -23,5 +27,8 @@ void signalHandler(int sig);
 char* copy_directory_path(char* path);
 void print_history();
 void add_to_history(char* command);
+int variable_exists(char* variable_name);
+int is_valid_expression(char* input);
+char** calculate_expression(char* command);
 #endif // ERROR_CODES
 
