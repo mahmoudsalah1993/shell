@@ -141,6 +141,19 @@ char** remove_spaces(char* input)
             strcpy(arr[arr_index] , temp);
             arr_index++;
         }
+        else if(input[i]=='\'')
+        {
+            i++;
+            start = i;
+            while(input[i]!='\'' && input[i]!='\0')
+            {
+                temp[i - start]=input[i];
+                i++;
+            }
+            temp[i - start] = '\0';
+            strcpy(arr[arr_index] , temp);
+            arr_index++;
+        }
         else if(input[i]==' ' || input[i]=='\t' || input[i]=='\n')i++;
         else
         {
@@ -152,6 +165,15 @@ char** remove_spaces(char* input)
                     quot_number++;
                     i++;
                     while(input[i]!='\0' && input[i]!='"')
+                    {
+                        temp[i - start-(quot_number)]=input[i];
+                        i++;
+                    }
+                }
+                else if(input[i]=='\''){
+                    quot_number++;
+                    i++;
+                    while(input[i]!='\0' && input[i]!='\'')
                     {
                         temp[i - start-(quot_number)]=input[i];
                         i++;

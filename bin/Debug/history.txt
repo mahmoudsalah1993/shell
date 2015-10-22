@@ -31,3 +31,15 @@ say my name? Heisenberg, You're goddamn right. hello hello hello  hello?
 
 apt-get update
 sudo apt-get update
+vim
+x=3
+echo $x
+echo $xhmada
+exit
+x=3
+echo $x"hell"
+touch test.txt
+pwd
+touch hmada.txt
+ls
+exit

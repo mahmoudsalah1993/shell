@@ -218,3 +218,28 @@ gedit history.txt
 apt -get
 apt-get update
 sudo apt-get update
+ls -l -a
+exit
+/bin/ls -l -a
+echo 'hello'
+echo 'hello'
+echo m'hamad'
+ya manar
+echo m'hama'
+echo m'hama
+exit
+x=3
+echo $x"hello"
+x=3
+echo $x"hello"
+x=3
+echo $x"hello"
+x=3
+echo $x"hello"
+x=3
+echo $x"hello"
+echo $x
+x=3
+echo $x
+echo $x hello
+exit
